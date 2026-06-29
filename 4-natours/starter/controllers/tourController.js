@@ -1,5 +1,4 @@
-
-const Tour= require('./../models/tourModel');
+const Tour= require('../models/tourModel');
 
 exports.checkBody = (req, res, next) => {
   if (!req.body.name || !req.body.price) {
@@ -12,7 +11,7 @@ exports.checkBody = (req, res, next) => {
 };
 
 exports.getAllTours = (req, res) => {
-  console.log(req.requestTime);
+  //console.log(req.requestTime);
   res.status(200).json({
     status: 'success',
     requestedAt: req.requestTime,
@@ -45,17 +44,17 @@ exports.createTour = (req, res) => {
 
         // },
       });
-    },
+    };
   
  
 
 exports.updateTour = (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour: '<Updated tour here...>',
-    },
-  });
+  // res.status(200).json({
+  //   status: 'success',
+  //   data: {
+  //     tour: '<Updated tour here...>',
+  //   },
+  // });
 };
 exports.deleteTour = (req, res) => {
   res.status(204).json({
