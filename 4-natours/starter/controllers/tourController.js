@@ -23,7 +23,18 @@ exports.getAllTours =  async (req, res) => {
        } 
         //sort('price ratingsAverage') in this it sort by price   and if same price then sort by ratingsAverage
         //write in postman as ?sort=price,ratingsAverage
-       
+        // 3.Field Limiting
+        if(req.query.fields){
+        const fields = req.query.fields.split(',').join(' ');
+        query = query.select(fields);
+        }else{
+          query = query.select('-__v');
+        }
+   
+
+
+
+
 //Excute query
    const tours = await query;
       
