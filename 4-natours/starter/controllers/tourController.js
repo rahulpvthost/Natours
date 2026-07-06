@@ -151,7 +151,7 @@ exports.getTourStats = async (req,res) =>{
   }catch(err){
     res.status(404).json({
       status:'fail',
-      message:err
+      message:err.message
     });
   }
 }
@@ -196,7 +196,7 @@ exports.getMonthlyPlan = async (req,res) =>{
   }catch(err){
     res.status(404).json({
       status:'fail',
-      message:err
+      message:err.message
     });
   }
 }
