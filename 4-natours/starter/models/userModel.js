@@ -27,3 +27,7 @@ const userSchema= new mongoose.Schema({
 });
 const User =mongoose.model('User',userSchema);
 module.exports = User;
+// in this photo and password are different field photo:is short form ofphoto: String is the short form of:
+// photo: {
+//     type: String
+// }  means it store image url that is present in string

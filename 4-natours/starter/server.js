@@ -25,7 +25,7 @@ mongoose
     useFindAndModify:false
 }).then(() =>{
  console.log("DB connection successfull");
-});
+})
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
