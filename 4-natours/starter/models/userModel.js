@@ -31,6 +31,11 @@ const userSchema= new mongoose.Schema({
         type:String,
         required:[true,'Please confirm your password'],
         select:false,
+
+          // select: false tells Mongoose:
+
+         // “Don't include active when this user is fetched normally.”
+
         validate:{
             //this only works on create and SAVE!
             validator:function(el){
@@ -69,6 +74,13 @@ userSchema.pre('save', function(next){
     this.passwordChangedAt = Date.now() - 1000;
     next();
 });
+
+userSchema.pre(/^find/,function(next){
+      //this points to current query
+       this.find({active:{$ne: false }});
+       next();
+});
+
 
 userSchema.methods.correctPassword = async function (
     candidatePassword,
