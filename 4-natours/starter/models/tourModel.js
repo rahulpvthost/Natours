@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const User =require('./userModel');
+// const User =require('./userModel');
 const slugify = require('slugify');
 //const validator = require('validator');
 
@@ -108,7 +108,12 @@ const tourSchema = new mongoose.Schema({
       day:Number
     }
    ],
-   guides:Array
+   guides:[
+       {
+        type:mongoose.Schema.ObjectId,
+        ref:'User'
+      }
+   ]
   },{
   toJSON:{virtuals:true},
   toObject:{virtuals:true},
@@ -129,11 +134,13 @@ next();
 });
 
 
-tourSchema.pre('save', async function(next){
-  const guidesPromises = this.guides.map( async id=>  await User.findById(id));
-  this.guides = await Promise.all(guidesPromises);
-  next();
-});
+
+// Below this code is for embedding in input it takes id of user in guides field add in schema guides:Array for this to work
+// tourSchema.pre('save', async function(next){
+//   const guidesPromises = this.guides.map( async id=>  await User.findById(id));
+//   this.guides = await Promise.all(guidesPromises);
+//   next();
+// });
 
 
 
