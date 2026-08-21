@@ -179,6 +179,19 @@ tourSchema.post(/^find/,function(docs,next){
   next();
 })
 
+tourSchema.pre(/^find/,function(next){
+
+this.populate({
+  path:'guides',
+  select: '-__v -passwordChangedAt'
+});
+
+  next();
+})
+
+
+
+
 //AGGREGATION MIDDLEWARE
 // this middleware hide the scretTour from aggreation file 
 tourSchema.pre('aggregate',function(next){
