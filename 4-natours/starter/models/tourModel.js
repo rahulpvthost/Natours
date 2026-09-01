@@ -189,6 +189,9 @@ this.populate({
   next();
 })
 
+//in this populate in select option see there is - sign which represent that it will not show the __v and passwordChangedAt field in the output of the query.
+//It excludes Mongoose's internal __v version key and the sensitive passwordChangedAt timestamp from the populated user data, so they aren't exposed in the API response. 
+
 
 
 
