@@ -38,7 +38,7 @@ const reviewSchema = new mongoose.Schema({
 }
 );
 
-reviewSchema.pre(/^find/,function(next){
+reviewSchema.pre(/^find/,function(){
 
 // this.populate({
 //   path:'tour',
@@ -53,7 +53,7 @@ this.populate({
     path:'user',
     select:'name photo'
 });
-  next();
+  
 });
 
 
