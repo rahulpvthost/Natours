@@ -31,19 +31,48 @@ const reviews = JSON.parse( fs.readFileSync(`${__dirname}/reviews.json`, `utf-8`
 
 
 
+// //import data into database
+// const importdata = async () => {
+//   try{
+//     await Tour.create(tours);
+//     // await User.insertMany(users);
+//     await User.insertMany(users, { lean: true });
+//     // await User.create(users,{validateBeforeSave:false});
+//     await Review.create(reviews);
+//     console.log('Data successfully loaded');
+//   }catch(err){
+//     console.log(err);
+//   }
+//         process.exit();
+
+// };
+
+
+
 //import data into database
 const importdata = async () => {
-  try{
+  try {
+    // Manually cast _id to a real ObjectId, since { lean: true } skips
+    // casting and would otherwise store _id as a plain string, breaking
+    // findById() lookups later.
+    const usersCasted = users.map(user => ({
+      ...user,
+      _id: new mongoose.Types.ObjectId(user._id),
+    }));
+
     await Tour.create(tours);
-    await User.create(users,{validateBeforeSave:false});
+    await User.insertMany(usersCasted, { lean: true });
     await Review.create(reviews);
     console.log('Data successfully loaded');
-  }catch(err){
+  } catch (err) {
     console.log(err);
   }
-        process.exit();
-
+  process.exit();
 };
+
+
+
+
 //Delete all data from database
 const deleteData = async ()=>{
     try{
