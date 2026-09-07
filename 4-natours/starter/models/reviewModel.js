@@ -39,6 +39,8 @@ const reviewSchema = new mongoose.Schema({
 }
 );
 
+reviewSchema.index({tour:1,user:1},{unique:true}); // this help to prevent duplicate reviews from the same user for the same tour
+
 reviewSchema.pre(/^find/,function(){
 
 // this.populate({
@@ -56,15 +58,6 @@ this.populate({
 });
   
 });
-
-
-
-
-
-
-
-
-
 reviewSchema.statics.calcAverageRatings = async function(tourId){
                 const stats =await   this.aggregate([
                     {
@@ -78,17 +71,36 @@ reviewSchema.statics.calcAverageRatings = async function(tourId){
                         }
                     }
                    ]);
-                          console.log(stats); 
-
+                        //   console.log(stats); 
+                         if(stats.length>0){
+                            await  Tour.findByIdAndUpdate(tourId,{
+                                ratingsQuantity:stats[0].nRating,
+                                ratingsAverage:stats[0].avgRating      
+                        });
+                         }else{
                         await  Tour.findByIdAndUpdate(tourId,{
-                            ratingsQuantity:stats[0].nRating,
-                            ratingsAverage:stats[0].avgRating      
-                    });
+                            ratingsQuantity:0,
+                            ratingsAverage:4.5 
+                        })     
+                    };
                 };
            reviewSchema.post('save',function(){
             // this points to current review
             this.constructor.calcAverageRatings(this.tour);
            });
+
+           reviewSchema.pre(/^findOneAnd/,async function(){
+            this.r = await this.model.findOne(this.getQuery());
+            // console.log(this.r);
+            
+           });
+
+           reviewSchema.post(/^findOneAnd/,async function(){
+            // await this.findOne(); does NOT work here, query has already executed
+            await this.r.constructor.calcAverageRatings(this.r.tour);
+           });
+
+            
         
 
 
