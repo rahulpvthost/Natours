@@ -122,6 +122,11 @@ const tourSchema = new mongoose.Schema({
 
 tourSchema.index({price:1,ratingAverage:-1});
 tourSchema.index({slug:1});
+tourSchema.index({startLocation:'2dsphere'});
+
+
+
+
 
 tourSchema.virtual('durationWeeks').get(function(){
   return this.duration/7;
@@ -210,11 +215,11 @@ this.populate({
 
 //AGGREGATION MIDDLEWARE
 // this middleware hide the scretTour from aggreation file 
-tourSchema.pre('aggregate',function(){
-  this.pipeline().unshift({$match:{secretTour : {$ne:true}}});
- // console.log(this.pipeline());
+// tourSchema.pre('aggregate',function(){
+//   this.pipeline().unshift({$match:{secretTour : {$ne:true}}});
+//  // console.log(this.pipeline());
   
-})
+// })
 
 const Tour = mongoose.model('Tour',tourSchema);
 module.exports =Tour;
