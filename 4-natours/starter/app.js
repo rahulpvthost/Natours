@@ -1,4 +1,4 @@
-
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const AppError = require('./utilis/appError');
@@ -15,7 +15,25 @@ const reviewRouter =require('./Routes/reviewRoutes');
 
 const app = express();
 
+app.set('view engine', 'pug');
+// This tells Express:
+// "I am using Pug as my template/view engine."
+
+app.set('views', path.join(__dirname, 'views'));
+// This tells Express:
+// "My Pug files are inside the views folder."
+
+
 //1)Global Middlewares
+
+
+//Serving static files
+// app.use(express.static(`${__dirname}/public`));
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+
+
 //security HTTP headers
 app.use(helmet());
 
@@ -57,8 +75,7 @@ app.use(hpp({
 );
 
 
-//Serving static files
-app.use(express.static(`${__dirname}/public`));
+
 
 
 //Test middleware
@@ -68,6 +85,11 @@ app.use((req, res, next) => {
   next();
 });
 
+
+app.get('/', (req, res) => {
+  res.status(200).render('base');
+  });
+  
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
