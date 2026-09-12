@@ -11,7 +11,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp= require('hpp');
 const reviewRouter =require('./Routes/reviewRoutes');
-
+const viewRouter =require('./Routes/viewRoutes');
 
 const app = express();
 
@@ -86,13 +86,7 @@ app.use((req, res, next) => {
 });
 
 
-app.get('/', (req, res) => {
-  res.status(200).render('base',{
-    tour:'The Forest Hiker',
-    user:'Jonas'
-  });
-  });
-  
+app.use('/',viewRouter); 
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
