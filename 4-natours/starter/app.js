@@ -35,7 +35,26 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 //security HTTP headers
-app.use(helmet());
+// app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", 'https://api.mapbox.com'],
+        styleSrc: ["'self'", 'https://api.mapbox.com', "'unsafe-inline'"],
+        connectSrc: [
+          "'self'",
+          'https://api.mapbox.com',
+          'https://events.mapbox.com'
+        ],
+        workerSrc: ["'self'", 'blob:'],
+        childSrc: ["'self'", 'blob:'],
+        imgSrc: ["'self'", 'data:', 'blob:']
+      }
+    }
+  })
+);
 
 //Development logging
 if (process.env.NODE_ENV === 'development') {
