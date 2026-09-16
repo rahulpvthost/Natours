@@ -27,4 +27,19 @@ import {showAlert} from './alert';
 }
 };
 
+export const logout = async () =>{
+        console.log('LOGOUT FUNCTION CALLED');
 
+    try{
+        const res = await axios ({
+            method:'GET',
+            url:'http://127.0.0.1:3000/api/v1/users/logout',
+        });
+          console.log('LOGOUT RESPONSE:', res.data);
+        if((res.data.status ==='success')) location.reload(true);
+
+    }catch(err){
+         console.log('LOGOUT ERROR:', err);
+        showAlert('error','Error logging out! Try again.' )
+    }
+}

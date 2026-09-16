@@ -68,10 +68,25 @@ exports.login = catchAsync( async(req,res,next)=>{
 
 });
 
+exports.logout = (req,res)=>{
+    res.cookie('jwt','loggedout',{
+    expires:new Date (Date.now()+10*1000),
+    httpOnly:true
+    });
+    res.status(200).json({status:'success'});
+};
+
+
+
+
+
+
+
+
 //only for rendered pages ,no error
-exports.isLoggedIn = catchAsync(async(req,res,next)=>{
+exports.isLoggedIn = async(req,res,next)=>{
         if(req.cookies.jwt){
-       
+       try{
     const decoded = await promisify(jwt.verify)(req.cookies.jwt,
         process.env.JWT_SECRET
     );
@@ -88,9 +103,12 @@ exports.isLoggedIn = catchAsync(async(req,res,next)=>{
       //There is a logged in user
       res.locals.user=currentUser;
       return next();
+}catch(err){
+    return next();
+}
 }
 next();
-});
+};
 
 
 
