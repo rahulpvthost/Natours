@@ -139,6 +139,7 @@ exports.protect = catchAsync(async(req,res,next)=>{
     //iat means issued at time
     //Grant access to protected route
         req.user = currentUser;
+        res.locals.user = currentUser;
 
     next();
 });
