@@ -1,5 +1,6 @@
 const Tour =require('../models/tourModel');
 const catchAsync =require('../utilis/catchasync');
+const AppError = require('../utilis/appError');
 
 exports.getOverview=catchAsync(async(req,res,next)=>{
   //1)Get tour data from collection
@@ -23,6 +24,12 @@ exports.getTour=catchAsync(async(req,res,next)=>{
     });
     //2)Build template
     //3)Render template using data from 1   
+
+   if(!tour){
+    return next(new AppError('There is no tour with that name.',404));
+   }
+
+
 
 
 
