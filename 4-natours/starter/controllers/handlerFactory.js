@@ -19,7 +19,7 @@ return next(new AppError('No document found with that ID',404));
 
 exports.updateOne = Model=> catchAsync(async (req, res,next) => {
     const doc = await Model.findByIdAndUpdate(req.params.id,req.body,{
-      new:true,
+      returnDocument: 'after',
       runValidators:true
     });
 
