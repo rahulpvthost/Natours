@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const User=require('../models/userModel');
 const catchAsync =require('../utilis/catchasync');
 const AppError = require('../utilis/appError');
-const sendEmail = require('../utilis/email');
+const Email = require('../utilis/email');
 
 const signToken = id =>jwt.sign({id},process.env.JWT_SECRET,{
         expiresIn:process.env.JWT_EXPIRES_IN
@@ -40,6 +40,10 @@ const signToken = id =>jwt.sign({id},process.env.JWT_SECRET,{
 
 exports.signup =  catchAsync(async (req,res,next)=>{
     const newUser= await User.create(req.body);
+
+    const url = `${req.protocol}://${req.get('host')}/me`;
+     console.log(url);
+    await new Email(newUser,url).sendWelcome();
     createSendToken(newUser,201,res);
     // const newUser = await User.create({
     //     name:req.body.name,
@@ -166,20 +170,12 @@ exports.forgotPassword = catchAsync(async (req,res,next)=>{
        const resetToken = user.createPasswordResetToken();
        await user.save({validateBeforeSave:false});
     //3) Send it to user's email
-    const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
-
-
-    
-    
-    const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: 
-    ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
-    
     try{
-         await sendEmail({
-        email:user.email,
-        subject:'Your password reset token (valid for 10 min)',
-        message
-      });
+      const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+
+
+      await new Email(user,resetURL).sendPasswordReset();
+
       res.status(200).json({
         status:'success',
         message:'Token sent to email!'
