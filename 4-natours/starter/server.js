@@ -48,5 +48,9 @@ process.on('SIGTERM',()=>{
   });
 });
 
+// Heroku frequently restarts your app's "dynos" — for routine maintenance, scaling, deploys, or every ~24 hours (a mandatory daily cycling). When it does this, it sends your app a SIGTERM signal to say "please shut down."
+
+// Without this handler, Node would abruptly kill the process — potentially cutting off requests mid-response, leaving users with errors or incomplete data.
+
 
 

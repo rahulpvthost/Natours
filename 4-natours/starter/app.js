@@ -13,6 +13,9 @@ const hpp= require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
 
+const cors = require('cors');
+
+
 const reviewRouter =require('./Routes/reviewRoutes');
 const bookingRouter = require('./Routes/bookingRoutes');
 const viewRouter =require('./Routes/viewRoutes');
@@ -32,6 +35,15 @@ app.set('views', path.join(__dirname, 'views'));
 
 
 //1)Global Middlewares
+//Tmplement CORS
+app.use(cors());
+//Access-Control-Allow-Origin
+//api.natours.com, front-end natours.com
+//app.use(cors({
+// origin: 'https://www.natours.com'
+//}))
+app.options('*',cors());
+// app.options('/api/v1/tours/:id',cors());
 
 
 //Serving static files
