@@ -20,6 +20,8 @@ const viewRouter =require('./Routes/viewRoutes');
 
 const app = express();
 
+app.enable('trust proxy');
+
 app.set('view engine', 'pug');
 // This tells Express:
 // "I am using Pug as my template/view engine."
